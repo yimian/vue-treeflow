@@ -1,5 +1,5 @@
 <template>
-<g>
+<g class="tree-conn">
     <defs>
         <linearGradient id="_MyGradient">
             <stop offset="5%" stop-color="rgb(252,121,49)"></stop>

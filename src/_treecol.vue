@@ -1,5 +1,5 @@
 <template>
-<g>
+<g class="tree-col">
     <rect :height="height" :width="width" class="bucket-container"></rect>
     <g v-for="bkt in buckets" class="bucket" :transform="translate(line_width, y_pos($index))"
         @click.prevent="select($index)" data-toggle="tooltip" data-placement="right" :title="bkt_tooltip(bkt)">
@@ -60,10 +60,15 @@ export default {
         },
         bkt_height: function(index) {
             var bkt = this.buckets[index];
+            var h = 0;
             if(index < this.buckets.length - 1){
-                return Math.round(bkt.data.ratio * this.height) - this.line_width;
+                h = Math.round(bkt.data.ratio * this.height) - this.line_width;
             }
-            return Math.round(bkt.data.ratio * this.height) - 2 * this.line_width;
+            h = Math.round(bkt.data.ratio * this.height) - 2 * this.line_width;
+            if(h < 0) {
+                return 0;
+            }
+            return h;
         },
         bkt_val_label: function(bkt) {
             var percent = Math.round(bkt.data.ratio * 100 * 10) / 10;
