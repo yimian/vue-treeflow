@@ -93,6 +93,12 @@ export default {
             return 2 * this.min_text_padding + this.text_height * 2 + this.min_text_padding;
         },
     },
+    watch: {
+        buckets: function() {
+            // 处理tooltips
+            $('[data-toggle="tooltip"]').tooltip({container: 'body', html: true});
+        }
+    },
     ready: function() {
         $(function() {
             // TODO：自己实现tooltip功能
