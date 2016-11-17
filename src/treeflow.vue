@@ -2,7 +2,7 @@
     <div class="tree-container">
         <svg width="100%" height="100%" :view-box.camel="viewbox(0, 0, width, height)">
             <g v-for="level in deep" :transform="translate(col_x_pos(level), 0)">
-                <tree-col :width="col_width" :height="height" :buckets="buckets_map[level]" :selected="selections[level]" :level="level" @select="select" v-if="buckets_map[level].length">
+                <tree-col :width="col_width" :height="height" :buckets="buckets_map[level]" :selected="selections[level]" :level="level" @select="select" v-if="buckets_map[level].length" @show-tooltip="show_tooltip" @hide-tooltip="hide_tooltip">
                 </tree-col>
             </g>
             <g v-for="level in conn_num" :transform="translate(conn_x_pos(level), 0)">
@@ -10,6 +10,13 @@
                 </tree-conn>
             </g>
         </svg>
+    </div>
+
+    <div class="tooltip right" v-show="tooltip" v-el:tooltip>
+        <div class="tooltip-arrow">
+        </div>
+        <div class="tooltip-inner">
+        </div>
     </div>
 </template>
 
@@ -43,6 +50,7 @@ export default {
     data: function() {
         return {
             selections: [],
+            tooltip: false  // 控制tooltip是否显示
         }
     },
     components: {
@@ -72,6 +80,16 @@ export default {
         },
         viewbox: function(min_x, min_y, width, height) {
             return '' + min_x + ' ' + min_y + ' ' + width + ' ' + height;
+        },
+        show_tooltip: function(div, event) {
+            var rect = event.target.getBoundingClientRect();
+            $(this.$els.tooltip).css('top', rect.top + rect.height / 2 - 20);
+            $(this.$els.tooltip).css('left', rect.left + rect.width + 2);
+			$('.tooltip-inner', this.$els.tooltip).html(div);
+            this.tooltip = true;
+        },
+        hide_tooltip: function(event) {
+            this.tooltip = false;
         }
     },
     computed: {
@@ -117,4 +135,58 @@ export default {
 .tree-container {
     padding: 10px 20px 0 20px;
 }
+
+.tooltip {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: left;
+    text-align: start;
+    text-decoration: none;
+    text-shadow: none;
+    text-transform: none;
+    letter-spacing: normal;
+    word-break: normal;
+    word-spacing: normal;
+    word-wrap: normal;
+    white-space: normal;
+    filter: alpha(opacity=0);
+    line-break: auto;
+    position: fixed;
+    margin: 10px 20px;
+    opacity: 1;
+}
+
+.tooltip-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+}
+
+.tooltip.right {
+    padding: 0 5px;
+    margin-left: 3px;
+}
+
+.tooltip.right .tooltip-arrow {
+    top: 50%;
+    left: 0;
+    margin-top: -5px;
+    border-width: 5px 5px 5px 0;
+    border-right-color: #000;
+}
+
+.tooltip-inner {
+    max-width: 200px;
+    padding: 3px 8px;
+    color: #fff;
+    text-align: center;
+    background-color: #000;
+    border-radius: 4px;
+}
+
 </style>

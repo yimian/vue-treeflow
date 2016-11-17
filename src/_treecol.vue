@@ -2,7 +2,7 @@
 <g class="tree-col">
     <rect :height="height" :width="width" class="bucket-container"></rect>
     <g v-for="bkt in buckets" class="bucket" :transform="translate(line_width, y_pos($index))"
-        @click.prevent="select($index)" data-toggle="tooltip" data-placement="right" :title="bkt_tooltip(bkt)">
+        @click.prevent="select($index)" @mouseenter="show_tooltip(bkt_tooltip(bkt), $event)" @mouseleave="hide_tooltip($event)">
         <rect :height="bkt_height($index)" class="bucket-item" :class="{'active': $index == selected}"
             :width="width - 2 * line_width"></rect>
         <g class="bucket-item-text" v-if="bkt_height($index) >= min_txt_height" data-toggle="tooltip" >
@@ -18,8 +18,6 @@
 </template>
 
 <script>
-
-require('bootstrap/js/tooltip')
 
 export default {
     data: function() {
@@ -77,6 +75,12 @@ export default {
         },
         bkt_tooltip: function(bkt) {
             return '<div class="bucket-tooltip">' + bkt.key + '<br/>' + this.bkt_val_label(bkt) + '</div>';
+        },
+        show_tooltip: function(div, event) {
+            this.$emit('show-tooltip', div, event);
+        },
+        hide_tooltip: function(event) {
+            this.$emit('hide-tooltip', event);
         }
     },
     computed: {
@@ -86,18 +90,6 @@ export default {
         inner_height: function() {
             return this.height - this.line_width * (this.buckets.length + 1);
         }
-    },
-    watch: {
-        buckets: function() {
-            // 处理tooltips
-            $('[data-toggle="tooltip"]').tooltip({container: 'body', html: true});
-        }
-    },
-    ready: function() {
-        $(function() {
-            // TODO：自己实现tooltip功能
-            $('[data-toggle="tooltip"]').tooltip({container: 'body', html: true});
-        });
     }
 }
 </script>
