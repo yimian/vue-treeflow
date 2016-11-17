@@ -65,6 +65,7 @@ export default {
         },
         select: function(index, level) {
             this.selections.$set(level, index);
+            this.$emit('select', this.selections);
         },
         conn_x_pos: function(level) {
             return Math.round(level * this.step_width) + this.col_width;

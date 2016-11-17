@@ -56,19 +56,10 @@ export default {
             for(var i = 0; i < index; i++) {
                 ratio += this.buckets[i].data.ratio;
             }
-            return Math.round(ratio * this.height) + this.line_width;
+            return ratio * this.inner_height + this.line_width * (index + 1);
         },
         bkt_height: function(index) {
-            var bkt = this.buckets[index];
-            var h = 0;
-            if(index < this.buckets.length - 1){
-                h = Math.round(bkt.data.ratio * this.height) - this.line_width;
-            }
-            h = Math.round(bkt.data.ratio * this.height) - 2 * this.line_width;
-            if(h < 0) {
-                return 0;
-            }
-            return h;
+            return this.inner_height * this.buckets[index].data.ratio;
         },
         bkt_val_label: function(bkt) {
             var percent = Math.round(bkt.data.ratio * 100 * 10) / 10;
@@ -92,6 +83,9 @@ export default {
         min_txt_height: function() {
             return 2 * this.min_text_padding + this.text_height * 2 + this.min_text_padding;
         },
+        inner_height: function() {
+            return this.height - this.line_width * (this.buckets.length + 1);
+        }
     },
     watch: {
         buckets: function() {
