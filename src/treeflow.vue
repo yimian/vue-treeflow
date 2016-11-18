@@ -10,12 +10,11 @@
                 </tree-conn>
             </g>
         </svg>
-    </div>
-
-    <div class="tooltip right" v-show="tooltip" v-el:tooltip>
-        <div class="tooltip-arrow">
-        </div>
-        <div class="tooltip-inner">
+        <div class="tooltip right" v-show="tooltip" v-el:tooltip>
+            <div class="tooltip-arrow">
+            </div>
+            <div class="tooltip-inner">
+            </div>
         </div>
     </div>
 </template>
