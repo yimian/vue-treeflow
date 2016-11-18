@@ -1,9 +1,9 @@
 <template>
 <g class="tree-col">
     <rect :height="height" :width="width" class="bucket-container"></rect>
-    <g v-for="bkt in buckets" class="bucket" :transform="translate(line_width, y_pos($index))"
+    <g v-for="bkt in buckets" class="bucket" :class="{'active': $index == selected}" :transform="translate(line_width, y_pos($index))"
         @click.prevent="select($index)" @mouseenter="show_tooltip(bkt_tooltip(bkt), $event)" @mouseleave="hide_tooltip($event)">
-        <rect :height="bkt_height($index)" class="bucket-item" :class="{'active': $index == selected}"
+        <rect :height="bkt_height($index)" class="bucket-item"
             :width="width - 2 * line_width"></rect>
         <g class="bucket-item-text" v-if="bkt_height($index) >= min_txt_height" data-toggle="tooltip" >
             <text class="bucket-item-text header" :dy="bkt_txt_y_pos(bkt_height($index))" :x="width / 2">
@@ -98,35 +98,46 @@ export default {
 
 .bucket-item {
     fill: white;
+    stroke:#aaa;
 }
 
 .bucket-container {
+  fill: #aaa;
 }
 
-.bucket-item.active {
-  stroke: rgb(253, 152, 39);
-  stroke-width: 2;
+.active .bucket-item{
+  stroke:rgba(38,166,154,1);
+  stroke-width:2;
+  fill:rgba(38,166,154,1);
 }
 
 .bucket-item:hover {
-  stroke-dasharray: 5,5;
-  stroke: #000;
-  stroke-width: 2;
+  stroke:rgba(38,166,154,1);
+  opacity: 0.8;
 }
 
-.bucket-item.active:hover {
-  stroke: rgb(253, 152, 39);
-  stroke-width: 2;
-  stroke-dasharray: 5,5;
+.active .bucket-item:hover {
+  opacity: 0.8;
 }
 
 .bucket-item-text {
   font: 16px sans-serif;
   text-anchor: middle;
+  fill: #333;
+}
+.active .bucket-item-text {
+  fill: #fff;
 }
 
 .bucket-item-text.val {
-  fill: blue;
+  fill: #999;
+  font-size:14px;
 }
+
+.active .bucket-item-text.val {
+  fill: rgba(255,255,255,.7)
+}
+
+
 
 </style>

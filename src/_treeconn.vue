@@ -1,13 +1,7 @@
 <template>
 <g class="tree-conn">
-    <defs>
-        <linearGradient id="_MyGradient">
-            <stop offset="5%" stop-color="rgb(252,121,49)"></stop>
-            <stop offset="100%" stop-color="white"></stop>
-        </linearGradient>
-    </defs>
     <g v-for="bkt in child_buckets">
-        <polygon :points="points($index)" class="bucket-conn" fill="url(#_MyGradient)" :class="{'active': $index == rightSelected}">
+        <polygon :points="points($index)" class="bucket-conn" :class="{'active': $index == rightSelected}">
         </polygon>
         <text class="bucket-conn-text" :x="width / 2" :y="text_y_pos($index)">{{ conn_text(bkt) }}</text>
     </g>
@@ -87,9 +81,11 @@ export default {
 </script>
 
 <style>
+.bucket-conn {
+    fill:rgba(180,180,180,.6);
+}
 .bucket-conn.active {
-    stroke: yellow;
-    stroke-width: 2;
+    fill:rgba(38,166,154,.5);
 }
 
 .bucket-conn-text {
