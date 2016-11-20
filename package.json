@@ -1,12 +1,12 @@
 {
-  "name": "treeflow",
+  "name": "vue-treeflow",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "visualize tree structure data",
+  "main": "./dist/treeflow.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "zhangjinjie@yimian.com.cn",
   "license": "ISC",
   "dependencies": {
     "jquery": "^3.1.1",
