@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["treeFlow"] = factory();
+		exports["treeflow"] = factory();
 	else
-		root["treeFlow"] = factory();
+		root["treeflow"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache

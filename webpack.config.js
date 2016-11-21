@@ -5,7 +5,7 @@ require('es6-promise').polyfill();
 
 module.exports = {
     entry: {
-        'treeFlow': './src/treeflow.vue'
+        'treeflow': './src/treeflow.vue'
     },
     output: {
         path: './dist',
