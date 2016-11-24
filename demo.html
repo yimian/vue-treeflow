@@ -5,18 +5,18 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js" type="text/javascript">
         </script>
         <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"-->
-        <script src="./dist/treeFlow.js" type="text/javascript"></script>
+        <script src="./dist/treeflow.js" type="text/javascript"></script>
     </head>
     <body>
         <div id="test">
-            <tree-flow :buckets="data"></tree-flow>
+            <treeflow :buckets="data"></treeflow>
         </div>
     </body>
     <script type="text/javascript">
         var vm = new Vue({
             el: '#test',
             components: {
-                treeFlow: treeFlow
+                treeflow: treeflow
             },
             data: {
                 data: [{
