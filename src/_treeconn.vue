@@ -1,9 +1,9 @@
 <template>
 <g class="tree-conn">
-    <g v-for="bkt in child_buckets">
-        <polygon :points="points($index)" class="bucket-conn" :class="{'active': $index == rightSelected}">
+    <g v-for="(bkt, index) in child_buckets">
+        <polygon :points="points(index)" class="bucket-conn" :class="{'active': index == rightSelected}">
         </polygon>
-        <text class="bucket-conn-text" :x="width / 2" :y="text_y_pos($index)">{{ conn_text(bkt) }}</text>
+        <text class="bucket-conn-text" :x="width / 2" :y="text_y_pos(index)">{{ conn_text(bkt) }}</text>
     </g>
 </g>
 </template>

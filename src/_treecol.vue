@@ -1,15 +1,15 @@
 <template>
 <g class="tree-col">
     <rect :height="height" :width="width" class="bucket-container"></rect>
-    <g v-for="bkt in buckets" class="bucket" :class="{'active': $index == selected}" :transform="translate(line_width, y_pos($index))"
-        @click.prevent="select($index)" @mouseenter="show_tooltip(bkt_tooltip(bkt), $event)" @mouseleave="hide_tooltip($event)">
-        <rect :height="bkt_height($index)" class="bucket-item"
+    <g v-for="(bkt, index) in buckets" class="bucket" :class="{'active': index == local_selected}" :transform="translate(line_width, y_pos(index))"
+        @click.prevent="select(index)" @mouseenter="show_tooltip(bkt_tooltip(bkt), $event)" @mouseleave="hide_tooltip($event)">
+        <rect :height="bkt_height(index)" class="bucket-item"
             :width="width - 2 * line_width"></rect>
-        <g class="bucket-item-text" v-if="bkt_height($index) >= min_txt_height" data-toggle="tooltip" >
-            <text class="bucket-item-text header" :dy="bkt_txt_y_pos(bkt_height($index))" :x="width / 2">
+        <g class="bucket-item-text" v-if="bkt_height(index) >= min_txt_height" data-toggle="tooltip" >
+            <text class="bucket-item-text header" :dy="bkt_txt_y_pos(bkt_height(index))" :x="width / 2">
                 {{ bkt.key }}
             </text>
-            <text class="bucket-item-text val" :dy="bkt_txt_y_pos(bkt_height($index)) + 26" :x="width / 2">
+            <text class="bucket-item-text val" :dy="bkt_txt_y_pos(bkt_height(index)) + 26" :x="width / 2">
                 {{ bkt_val_label(bkt) }}
             </text>
         </g>
@@ -24,7 +24,8 @@ export default {
         return {
             line_width: 1,
             text_height: 16,
-            min_text_padding: 10
+            min_text_padding: 10,
+            local_selected: this.selected
         }
     },
     props: {
@@ -70,8 +71,8 @@ export default {
             return height / 2 - this.min_text_padding / 2 - this.text_height;
         },
         select: function(index) {
-            this.selected = index;
-            this.$emit('select', this.selected, this.level);
+            this.local_selected = index;
+            this.$emit('select', this.local_selected, this.level);
         },
         bkt_tooltip: function(bkt) {
             return '<div class="bucket-tooltip">' + bkt.key + '<br/>' + this.bkt_val_label(bkt) + '</div>';

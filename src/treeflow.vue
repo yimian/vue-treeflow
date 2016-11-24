@@ -1,16 +1,16 @@
 <template>
     <div class="tree-container">
         <svg width="100%" height="100%" :view-box.camel="viewbox(0, 0, width, height)">
-            <g v-for="level in deep" :transform="translate(col_x_pos(level), 0)">
+            <g v-for="level in range(deep)" :transform="translate(col_x_pos(level), 0)">
                 <tree-col :width="col_width" :height="height" :buckets="buckets_map[level]" :selected="selections[level]" :level="level" @select="select" v-if="buckets_map[level].length" @show-tooltip="show_tooltip" @hide-tooltip="hide_tooltip">
                 </tree-col>
             </g>
-            <g v-for="level in conn_num" :transform="translate(conn_x_pos(level), 0)">
+            <g v-for="level in range(conn_num)" :transform="translate(conn_x_pos(level), 0)">
                 <tree-conn :width="conn_width" :height="height" :buckets="buckets_map[level]" :left-selected="selections[level]" :right-selected="selections[level + 1]">
                 </tree-conn>
             </g>
         </svg>
-        <div class="tooltip right" v-show="tooltip" v-el:tooltip>
+        <div class="tooltip right" v-show="tooltip" ref="tooltip">
             <div class="tooltip-arrow">
             </div>
             <div class="tooltip-inner">
@@ -23,6 +23,7 @@
 
 import treeCol from './_treecol.vue'
 import treeConn from './_treeconn.vue'
+import Vue from 'vue'
 
 export default {
     props: {
@@ -71,7 +72,7 @@ export default {
             return bkt;
         },
         select: function(index, level) {
-            this.selections.$set(level, index);
+            Vue.set(this.selections, level, index);
             this.$emit('select', this.selections);
         },
         conn_x_pos: function(level) {
@@ -82,13 +83,20 @@ export default {
         },
         show_tooltip: function(div, event) {
             var rect = event.target.getBoundingClientRect();
-            $(this.$els.tooltip).css('top', rect.top + rect.height / 2 - 20);
-            $(this.$els.tooltip).css('left', rect.left + rect.width + 2);
-			$('.tooltip-inner', this.$els.tooltip).html(div);
+            $(this.$refs.tooltip).css('top', rect.top + rect.height / 2 - 20);
+            $(this.$refs.tooltip).css('left', rect.left + rect.width + 2);
+            $('.tooltip-inner', this.$refs.tooltip).html(div);
             this.tooltip = true;
         },
         hide_tooltip: function(event) {
             this.tooltip = false;
+        },
+        range: function(val) {
+            var l = [];
+            for(let i = 0; i < val; i++) {
+                l.push(i);
+            }
+            return l;
         }
     },
     computed: {
@@ -124,7 +132,7 @@ export default {
     created: function() {
         // 初始化selections
         for (var i = 0; i < this.deep; i++) {
-            this.selections.$set(i, 0);
+            Vue.set(this.selections, i, 0);
         }
     }
 }

@@ -2,10 +2,10 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js" type="text/javascript">
+        <script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript">
         </script>
         <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"-->
-        <script src="./dist/treeFlow.js" type="text/javascript"></script>
+        <script src="./dist/treeflow.js" type="text/javascript"></script>
     </head>
     <body>
         <div id="test">
@@ -16,7 +16,7 @@
         var vm = new Vue({
             el: '#test',
             components: {
-                treeFlow: treeFlow
+                treeFlow: treeflow
             },
             data: {
                 data: [{
