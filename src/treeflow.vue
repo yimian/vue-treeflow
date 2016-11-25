@@ -6,7 +6,7 @@
                 </tree-col>
             </g>
             <g v-for="level in conn_num" :transform="translate(conn_x_pos(level), 0)">
-                <tree-conn :width="conn_width" :height="height" :buckets="buckets_map[level]" :left-selected="selections[level]" :right-selected="selections[level + 1]">
+                <tree-conn :width="conn_width" :height="height" :buckets="buckets_map[level]" :left-selected="selections[level]" :right-selected="selections[level + 1]" @show-tooltip="show_tooltip" @hide-tooltip="hide_tooltip">
                 </tree-conn>
             </g>
         </svg>
@@ -80,11 +80,19 @@ export default {
         viewbox: function(min_x, min_y, width, height) {
             return '' + min_x + ' ' + min_y + ' ' + width + ' ' + height;
         },
-        show_tooltip: function(div, event) {
-            var rect = event.target.getBoundingClientRect();
-            $(this.$els.tooltip).css('top', rect.top + rect.height / 2 - 20);
-            $(this.$els.tooltip).css('left', rect.left + rect.width + 2);
-			$('.tooltip-inner', this.$els.tooltip).html(div);
+        show_tooltip: function(div, event, cursor) {
+            var top = 0, left = 0;
+            if(cursor) {
+                left = event.x;
+                top = event.y - 20;
+            } else {
+                var rect = event.target.getBoundingClientRect();
+                left = rect.left + rect.width + 2;
+                top = rect.top + rect.height / 2 - 20;
+            }
+            $(this.$els.tooltip).css('top', top);
+            $(this.$els.tooltip).css('left', left);
+            $('.tooltip-inner', this.$els.tooltip).html(div);
             this.tooltip = true;
         },
         hide_tooltip: function(event) {

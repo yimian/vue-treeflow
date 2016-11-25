@@ -21,6 +21,7 @@ YPosApi.prototype.getR = function() {  // 计算需要将文本放在矩形框�
     var r = N;  // 初始设置不能容忍文本的最大类目序号
     var H_a = this.height - (N - 1) * this.bkt_margin;
     var H_c = H_a;  // 除去矩形外文本后的容忍高度
+    // TODO: 后续可以反向循环，增强计算效率
     for(let i = 0; i < r; i++) {
         if(this.buckets[i].data.ratio * H_c >= this.min_txt_height) {
             continue;

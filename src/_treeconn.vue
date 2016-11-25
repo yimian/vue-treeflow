@@ -1,6 +1,6 @@
 <template>
 <g class="tree-conn">
-    <g v-for="bkt in child_buckets">
+    <g v-for="bkt in child_buckets" @mousemove="show_tooltip(bkt_tooltip(bkt), $event)" @mouseleave="hide_tooltip($event)">
         <path :d="path_data($index)" class="bucket-conn" :class="{'active': $index == rightSelected}">
         </path>
     </g>
@@ -81,6 +81,20 @@ export default {
                 ratio += buckets[i].data.ratio;
             }
             return ratio * height;
+        },
+        bkt_tooltip: function(bkt) {
+            return '<div class="bucket-tooltip">' + bkt.key + ' 占 ' + this.buckets[this.leftSelected].key + '<br/>' +
+                this.bkt_val_label(bkt) + '</div>';
+        },
+        bkt_val_label: function(bkt) {
+            var percent = Math.round(bkt.data.ratio * 100 * 10) / 10;
+            return '' + bkt.data.value + ' ' + '(' + percent + '%)';
+        },
+        show_tooltip: function(div, event) {
+            this.$emit('show-tooltip', div, event, true);
+        },
+        hide_tooltip: function(event) {
+            this.$emit('hide-tooltip', event);
         }
     },
     computed: {
