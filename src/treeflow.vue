@@ -6,7 +6,7 @@
                 </tree-col>
             </g>
             <g v-for="level in conn_num" :transform="translate(conn_x_pos(level), 0)">
-                <tree-conn :width="conn_width" :height="height" :buckets="buckets_map[level]" :left-selected="selections[level]" :right-selected="selections[level + 1]" @show-tooltip="show_tooltip" @hide-tooltip="hide_tooltip">
+                <tree-conn :width="conn_width" :height="height" :buckets="buckets_map[level]" :left-selected="selections[level]" :right-selected="selections[level + 1]" :level="level" @select="select" @show-tooltip="show_tooltip" @hide-tooltip="hide_tooltip">
                 </tree-conn>
             </g>
         </svg>

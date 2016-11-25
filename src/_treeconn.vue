@@ -1,6 +1,7 @@
 <template>
 <g class="tree-conn">
-    <g v-for="bkt in child_buckets" @mousemove="show_tooltip(bkt_tooltip(bkt), $event)" @mouseleave="hide_tooltip($event)">
+    <g v-for="bkt in child_buckets" @mousemove="show_tooltip(bkt_tooltip(bkt), $event)" @mouseleave="hide_tooltip($event)"
+        @click.prevent="select($index)">
         <path :d="path_data($index)" class="bucket-conn" :class="{'active': $index == rightSelected}">
         </path>
     </g>
@@ -43,6 +44,10 @@ export default {
             default: 0
         },
         rightSelected: {
+            type: Number,
+            default: 0
+        },
+        level: {  // 上层处理select事件时需要
             type: Number,
             default: 0
         }
@@ -95,6 +100,10 @@ export default {
         },
         hide_tooltip: function(event) {
             this.$emit('hide-tooltip', event);
+        },
+        select: function(index) {
+            this.rightSelected = index;
+            this.$emit('select', index, this.level + 1);  // conn的level+1才是col的level
         }
     },
     computed: {
