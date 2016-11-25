@@ -1,15 +1,13 @@
 <template>
 <g class="tree-col">
-    <rect :height="height" :width="width" class="bucket-container"></rect>
-    <g v-for="bkt in buckets" class="bucket" :class="{'active': $index == selected}" :transform="translate(line_width, y_pos($index))"
+    <g v-for="bkt in buckets" class="bucket" :class="{'active': $index == selected}" :transform="translate(0, y_pos($index))"
         @click.prevent="select($index)" @mouseenter="show_tooltip(bkt_tooltip(bkt), $event)" @mouseleave="hide_tooltip($event)">
-        <rect :height="bkt_height($index)" class="bucket-item"
-            :width="width - 2 * line_width"></rect>
-        <g class="bucket-item-text" v-if="bkt_height($index) >= min_txt_height" data-toggle="tooltip" >
-            <text class="bucket-item-text header" :dy="bkt_txt_y_pos(bkt_height($index))" :x="width / 2">
+        <rect :height="bkt_height($index)" class="bucket-item" :width="width" rx="2" ry="2"></rect>
+        <g class="bucket-item-text" >
+            <text class="bucket-item-text header" :dy="bkt_txt_y_pos($index)" :x="width / 2">
                 {{ bkt.key }}
             </text>
-            <text class="bucket-item-text val" :dy="bkt_txt_y_pos(bkt_height($index)) + 26" :x="width / 2">
+            <text class="bucket-item-text val" :dy="bkt_txt_y_pos($index) + line_height" :x="width / 2">
                 {{ bkt_val_label(bkt) }}
             </text>
         </g>
@@ -19,14 +17,9 @@
 
 <script>
 
+import YPosApi from './_yposapi'
+
 export default {
-    data: function() {
-        return {
-            line_width: 1,
-            text_height: 16,
-            min_text_padding: 10
-        }
-    },
     props: {
         width: {
             type: Number,
@@ -50,14 +43,10 @@ export default {
     },
     methods: {
         y_pos: function(index) {
-            var ratio = 0;
-            for(var i = 0; i < index; i++) {
-                ratio += this.buckets[i].data.ratio;
-            }
-            return ratio * this.inner_height + this.line_width * (index + 1);
+            return this.ypos_api.getYPos(index);
         },
         bkt_height: function(index) {
-            return this.inner_height * this.buckets[index].data.ratio;
+            return this.ypos_api.getHeight(index);
         },
         bkt_val_label: function(bkt) {
             var percent = Math.round(bkt.data.ratio * 100 * 10) / 10;
@@ -66,8 +55,8 @@ export default {
         translate: function(x, y) {
             return 'translate(' + x + ',' + y + ')';
         },
-        bkt_txt_y_pos: function(height) {
-            return height / 2 - this.min_text_padding / 2 - this.text_height;
+        bkt_txt_y_pos: function(index) {
+            return this.ypos_api.getTextPos(index);
         },
         select: function(index) {
             this.selected = index;
@@ -84,11 +73,11 @@ export default {
         }
     },
     computed: {
-        min_txt_height: function() {
-            return 2 * this.min_text_padding + this.text_height * 2 + this.min_text_padding;
+        ypos_api: function() {
+            return new YPosApi(this.buckets, this.height);
         },
-        inner_height: function() {
-            return this.height - this.line_width * (this.buckets.length + 1);
+        line_height: function() {
+            return this.ypos_api.text_height + this.ypos_api.text_padding;
         }
     }
 }
