@@ -3,7 +3,7 @@
     <g v-for="bkt in buckets" class="bucket" :class="{'active': $index == selected}" :transform="translate(0, y_pos($index))"
         @click.prevent="select($index)" @mouseenter="show_tooltip(bkt_tooltip(bkt), $event)" @mouseleave="hide_tooltip($event)">
         <rect :height="bkt_height($index)" class="bucket-item" :width="width" rx="2" ry="2"></rect>
-        <g class="bucket-item-text" >
+        <g class="bucket-item-text" :class="{'outer': is_text_outer($index)}">
             <text class="bucket-item-text header" :dy="bkt_txt_y_pos($index)" :x="width / 2">
                 {{ bkt.key }}
             </text>
@@ -70,6 +70,9 @@ export default {
         },
         hide_tooltip: function(event) {
             this.$emit('hide-tooltip', event);
+        },
+        is_text_outer: function(index) {
+            return this.ypos_api.isTextOuter(index);
         }
     },
     computed: {

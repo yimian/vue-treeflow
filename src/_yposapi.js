@@ -65,6 +65,10 @@ YPosApi.prototype.getTextPos = function(index) {
     } else {
         return bkt_height + this.text_padding + this.text_height;
     }
-}
+};
+
+YPosApi.prototype.isTextOuter = function(index) {
+    return index < this.r ? false : true;
+};
 
 export default YPosApi;
