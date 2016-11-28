@@ -2,7 +2,7 @@
 <g class="tree-col">
     <g v-for="bkt in buckets" class="bucket" :class="{'active': $index == selected}" :transform="translate(0, y_pos($index))"
         @click.prevent="select($index)" @mouseenter="show_tooltip(bkt_tooltip(bkt), $event)" @mouseleave="hide_tooltip($event)">
-        <rect :height="bkt_height($index)" class="bucket-item" :width="width" rx="2" ry="2"></rect>
+        <rect :height="bkt_height($index)" class="bucket-item" :width="width" rx="0" ry="0"></rect>
         <g class="bucket-item-text" :class="{'outer': is_text_outer($index)}">
             <text class="bucket-item-text header" :dy="bkt_txt_y_pos($index)" :x="width / 2">
                 {{ bkt.key }}
@@ -99,23 +99,25 @@ export default {
 
 .active .bucket-item{
   stroke:rgba(38,166,154,1);
-  stroke-width:2;
   fill:rgba(38,166,154,1);
 }
 
 .bucket-item:hover {
   stroke:rgba(38,166,154,1);
-  opacity: 0.8;
+  opacity: 0.9;
+  cursor:pointer;
 }
 
 .active .bucket-item:hover {
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .bucket-item-text {
-  font: 16px sans-serif;
+  font: 16px;
   text-anchor: middle;
   fill: #333;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 .active .bucket-item-text {
   fill: #fff;
@@ -123,13 +125,22 @@ export default {
 
 .bucket-item-text.val {
   fill: #999;
-  font-size:14px;
+  font-size:12px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .active .bucket-item-text.val {
   fill: rgba(255,255,255,.7)
 }
 
+.active .outer .header {
+  fill: rgba(38,166,154,1);
+  
+}
+.active .outer .val {
+  fill: rgba(38,166,154,.5)
+}
 
 
 </style>
