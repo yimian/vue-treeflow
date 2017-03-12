@@ -1,12 +1,12 @@
 <template>
     <div class="tree-container">
-        <svg width="100%" height="100%" :view-box.camel="viewbox(0, 0, width, height)">
+        <svg width="100%" height="100%" :view-box.camel="viewbox(0, 0, width, adjusted_height)">
             <g v-for="level in deep" :transform="translate(col_x_pos(level), 0)">
-                <tree-col :width="col_width" :height="height" :buckets="buckets_map[level]" :selected="selections[level]" :level="level" @select="select" v-if="buckets_map[level].length" @show-tooltip="show_tooltip" @hide-tooltip="hide_tooltip">
+                <tree-col :width="col_width" :height="adjusted_height" :buckets="buckets_map[level]" :selected="selections[level]" :level="level" @select="select" v-if="buckets_map[level].length" @show-tooltip="show_tooltip" @hide-tooltip="hide_tooltip">
                 </tree-col>
             </g>
             <g v-for="level in conn_num" :transform="translate(conn_x_pos(level), 0)">
-                <tree-conn :width="conn_width" :height="height" :buckets="buckets_map[level]" :left-selected="selections[level]" :right-selected="selections[level + 1]" :level="level" @select="select" @show-tooltip="show_tooltip" @hide-tooltip="hide_tooltip">
+                <tree-conn :width="conn_width" :height="adjusted_height" :buckets="buckets_map[level]" :left-selected="selections[level]" :right-selected="selections[level + 1]" :level="level" @select="select" @show-tooltip="show_tooltip" @hide-tooltip="hide_tooltip">
                 </tree-conn>
             </g>
         </svg>
@@ -21,6 +21,7 @@
 
 <script>
 
+import YPosApi from './_yposapi'
 import treeCol from './_treecol.vue'
 import treeConn from './_treeconn.vue'
 
@@ -127,6 +128,26 @@ export default {
                 }
             }
             return bm;
+        },
+        adjusted_height: function() {
+            // 找到bucket具有的最大长度
+            function max_N(buckets) {
+                if(!buckets) {
+                    return 0;
+                }
+                var max_v = buckets.length;
+                for(var i = 0; i < buckets.length; i++) {
+                    var N = max_N(buckets[i].buckets);
+                    if(N > max_v) {
+                        max_v = N;
+                    }
+                }
+                return max_v;
+            }
+            var N = max_N(this.buckets);
+            var ypos_api = new YPosApi(this.buckets, this.height);
+            var min_height = ypos_api.getMinHeight(N);
+            return min_height > this.height ? min_height : this.height;
         }
     },
     created: function() {
